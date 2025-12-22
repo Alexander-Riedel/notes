@@ -1,12 +1,31 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZoneChangeDetection,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
+import { csrfInterceptor } from './core/http/csrf.interceptor';
+import { AuthStateService } from './core/auth/auth-state.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes)
+    provideRouter(routes),
+    provideHttpClient(withInterceptors([csrfInterceptor])),
+
+    // Business-clean bootstrap: check session once before app is considered initialized
+    provideAppInitializer(() => {
+      const authState = inject(AuthStateService);
+
+      // If the function returns an Observable/Promise, Angular waits until it completes.
+      // AuthStateService.init() completes (success or fail-closed).
+      return authState.init();
+    }),
   ]
 };
