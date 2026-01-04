@@ -11,13 +11,14 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { routes } from './app.routes';
 import { csrfInterceptor } from './core/http/csrf.interceptor';
 import { AuthStateService } from './core/auth/auth-state.service';
+import { authErrorInterceptor } from './core/http/auth-error.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withInterceptors([csrfInterceptor])),
+    provideHttpClient(withInterceptors([csrfInterceptor, authErrorInterceptor])),
 
     // Business-clean bootstrap: check session once before app is considered initialized
     provideAppInitializer(() => {
