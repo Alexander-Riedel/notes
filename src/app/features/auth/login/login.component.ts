@@ -3,17 +3,16 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
+import { MatButtonModule } from '@angular/material/button';
+
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStateService } from '../../../core/auth/auth-state.service';
 
 @Component({
     selector: 'app-login',
-    imports: [CommonModule],
-    template: `
-    <h1>Login placeholder</h1>
-
-    <button (click)="login()">Login test</button>
-  `,
+    imports: [CommonModule, MatButtonModule],
+    templateUrl: './login.html',
+    styleUrls: ['login.scss']
 })
 export class LoginComponent {
     private readonly auth = inject(AuthService);
