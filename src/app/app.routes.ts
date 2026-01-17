@@ -2,9 +2,9 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 
 // Minimal placeholder components (replace with your real ones later)
-import { LoginComponent } from './features/auth/login/login.component';
+import { LoginComponent } from './features/auth/login/login';
 import { AppShellComponent } from './features/shell/app-shell.component';
-import { HomeComponent } from './features/home/home.component';
+import { HomeComponent } from './features/home/home';
 
 export const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'app' },

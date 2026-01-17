@@ -1,23 +1,32 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '../../../core/auth/auth.service';
 import { AuthStateService } from '../../../core/auth/auth-state.service';
 
 @Component({
     selector: 'app-login',
-    imports: [CommonModule, MatButtonModule],
+    imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatCardModule],
     templateUrl: './login.html',
-    styleUrls: ['login.scss']
+    styleUrls: ['login.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
     private readonly auth = inject(AuthService);
     private readonly authState = inject(AuthStateService);
     private readonly router = inject(Router);
+
+    showLoginButton = true;
+    showForm = false;
+    hide = signal(true);
 
     constructor() {
         // If already authenticated, don't show login -> go to home
@@ -26,6 +35,21 @@ export class LoginComponent {
                 this.router.navigateByUrl('/app/home');
             }
         });
+    }
+
+    openForm() {
+        this.showLoginButton = false;
+        this.showForm = true;
+    }
+
+    closeForm() {
+        this.showLoginButton = true;
+        this.showForm = false;
+    }
+
+    clickEvent(event: MouseEvent) {
+        this.hide.set(!this.hide());
+        event.stopPropagation();
     }
 
     login() {

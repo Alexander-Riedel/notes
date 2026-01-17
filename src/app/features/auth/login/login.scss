@@ -1,6 +1,24 @@
-.center-container {
-  height: 100vh;
+.login-page {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+}
+
+.login-form-card mat-card-header {
+  padding: 16px;
+}
+
+.login-form-card mat-card-content {
+  display: flex;
+  flex-direction: column;
+}
+
+input.example-right-align::-webkit-outer-spin-button,
+input.example-right-align::-webkit-inner-spin-button {
+  display: none;
+}
+
+input.example-right-align {
+  -moz-appearance: textfield;
 }
