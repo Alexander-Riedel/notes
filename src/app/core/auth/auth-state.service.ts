@@ -3,6 +3,9 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 import { AuthApiService, MeResponse } from '../api/auth-api.service';
+// DEV
+import { environment } from '../../../environments/environment';
+// DEV END
 
 @Injectable({ providedIn: 'root' })
 export class AuthStateService {
@@ -18,12 +21,40 @@ export class AuthStateService {
         map((user) => !!user),
     );
 
+    // DEV
+    /** NEW: allow AuthService (dev) to set user directly */
+    setUser(user: MeResponse | null): void {
+        this.userSubject.next(user);
+    }
+
+    /** Helper for dev persistence */
+    private loadDevUser(): MeResponse | null {
+        const raw = localStorage.getItem('dev_me');
+        if (!raw) return null;
+        try {
+            return JSON.parse(raw) as MeResponse;
+        } catch {
+            localStorage.removeItem('dev_me');
+            return null;
+        }
+    }
+
     /**
      * Call this once on app start (e.g. in AppComponent).
      * It checks the current session via /auth/me and updates state.
      */
     init(): Observable<boolean> {
         this.loadingSubject.next(true);
+
+        // DEV: use localStorage instead of calling backend
+        if (environment.fakeAuth) {
+            const devUser = this.loadDevUser();
+            this.userSubject.next(devUser);
+            this.loadingSubject.next(false);
+            return of(!!devUser);
+        }
+        // DEV END
+
 
         return this.api.me().pipe(
             tap((me) => this.userSubject.next(me)),
@@ -41,6 +72,12 @@ export class AuthStateService {
      */
     clear(): void {
         this.userSubject.next(null);
+
+        // DEV: clear persisted fake user too
+        if (environment.fakeAuth) {
+            localStorage.removeItem('dev_me');
+        }
+        // DEV END
     }
 
     /**
@@ -48,6 +85,15 @@ export class AuthStateService {
      */
     reloadMe(): Observable<MeResponse | null> {
         this.loadingSubject.next(true);
+
+        // DEV: reload from localStorage
+        if (environment.fakeAuth) {
+            const devUser = this.loadDevUser();
+            this.userSubject.next(devUser);
+            this.loadingSubject.next(false);
+            return of(devUser);
+        }
+        // DEV END
 
         return this.api.me().pipe(
             tap((me) => this.userSubject.next(me)),
