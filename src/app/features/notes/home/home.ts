@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthStateService } from '../../core/auth/auth-state.service';
+import { AuthStateService } from '../../../core/auth/auth-state';
 
 @Component({
   selector: 'app-home',

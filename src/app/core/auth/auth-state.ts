@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
-import { AuthApiService, MeResponse } from '../api/auth-api.service';
+import { AuthApiService, MeResponse } from './auth-api';
 // DEV
 import { environment } from '../../../environments/environment';
 // DEV END

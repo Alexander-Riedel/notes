@@ -10,8 +10,8 @@ import {
     LoginRequest,
     RegisterRequest,
     MeResponse,
-} from '../api/auth-api.service';
-import { AuthStateService } from './auth-state.service';
+} from './auth-api';
+import { AuthStateService } from './auth-state';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

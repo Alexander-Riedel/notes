@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
 
-import { AuthApiService } from '../api/auth-api.service';
-import { AuthStateService } from '../auth/auth-state.service';
+import { AuthApiService } from '../auth/auth-api';
+import { AuthStateService } from '../auth/auth-state';
 
 /**
  * Global 401 handling (business-style):

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 import { MatButtonModule } from '@angular/material/button';
@@ -9,19 +9,20 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { AuthService } from '../../../core/auth/auth.service';
-import { AuthStateService } from '../../../core/auth/auth-state.service';
+import { AuthService } from '../../auth';
+import { AuthStateService } from '../../auth-state';
 
 @Component({
     selector: 'app-login',
     imports: [CommonModule, MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule, MatCardModule],
     templateUrl: './login.html',
-    styleUrls: ['login.scss'],
+    styleUrls: ['./login.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoginComponent {
     private readonly auth = inject(AuthService);
     private readonly authState = inject(AuthStateService);
+    private readonly route = inject(ActivatedRoute);
     private readonly router = inject(Router);
 
     showLoginButton = true;
@@ -53,6 +54,9 @@ export class LoginComponent {
     }
 
     login() {
+        const returnUrl =
+            this.route.snapshot.queryParamMap.get('returnUrl') ?? '/app/home';
+
         this.auth.login({ email: 'test@example.com', password: 'test1234' }).subscribe({
             next: () => this.router.navigateByUrl('/app/home'),
             error: (err) => {

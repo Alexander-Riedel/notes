@@ -10,7 +10,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 
 import { routes } from './app.routes';
 import { csrfInterceptor } from './core/http/csrf.interceptor';
-import { AuthStateService } from './core/auth/auth-state.service';
+import { AuthStateService } from './core/auth/auth-state';
 import { authErrorInterceptor } from './core/http/auth-error.interceptor';
 
 export const appConfig: ApplicationConfig = {

@@ -2,8 +2,8 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, Router } from '@angular/router';
 
-import { AuthService } from '../../core/auth/auth.service';
-import { AuthStateService } from '../../core/auth/auth-state.service';
+import { AuthService } from '../core/auth/auth';
+import { AuthStateService } from '../core/auth/auth-state';
 
 @Component({
     selector: 'app-shell',
